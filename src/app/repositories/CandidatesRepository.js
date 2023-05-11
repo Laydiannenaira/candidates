@@ -62,18 +62,36 @@ class CandidatesRepository {
   }
 
   update(id, { name, partido, votos }) {
-    return new Promise((resolve) => {
-      const updateCandidate = {
-        id,
-        name,
-        partido,
-        votos,
-      };
-      candidates = candidates.map((candidate) => (
-        candidate.id === id ? updateCandidate : candidate
-      ));
+    // return new Promise((resolve) => {
+    //   const updateCandidate = {
+    //     id,
+    //     name,
+    //     partido,
+    //     votos,
+    //   };
+    //   candidates = candidates.map((candidate) => (
+    //     candidate.id === id ? updateCandidate : candidate
+    //   ));
 
-      resolve(updateCandidate);
+    //   resolve(updateCandidate);
+    // });
+
+    return new Promise((resolve) => {
+      const candidate = candidates.find((c) => c.id === id);
+
+      // if (!candidate) {
+      //   return resolve(null);
+      // }
+
+      const oldVotos = parseInt(candidate.votos);
+      const newVotos = parseInt(votos);
+      const updatedVotos = oldVotos + newVotos;
+
+      candidate.name = name;
+      candidate.partido = partido;
+      candidate.votos = updatedVotos.toString();
+
+      resolve(candidate);
     });
   }
 }
