@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS candidate (
   voto INT
 );
 
-CREATE TABLE votos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    candidato_id INT NOT NULL,
-    valor INT NOT NULL
-);
+-- CREATE TABLE votos (
+--     id INT PRIMARY KEY AUTO_INCREMENT,
+--     candidato_id INT NOT NULL,
+--     valor INT NOT NULL
+-- );
 

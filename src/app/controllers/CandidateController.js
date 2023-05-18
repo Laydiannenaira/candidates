@@ -29,12 +29,12 @@ class CandidateController {
       return response.status(400).json({ error: 'Name  or Partido is required' });
     }
 
-    const nameExists = await CandidatesRepository.findByName(name);
-    const partidoExists = await CandidatesRepository.findByPartido(partido);
+    // const nameExists = await CandidatesRepository.findByName(name);
+    // const partidoExists = await CandidatesRepository.findByPartido(partido);
 
-    if (nameExists && partidoExists) {
-      return response.status(400).json({ error: 'Partido and Name is exists' });
-    }
+    // if (nameExists && partidoExists) {
+    //   return response.status(400).json({ error: 'Partido and Name is exists' });
+    // }
 
     const candidate = await CandidatesRepository.create({ name, partido, votos });
 
@@ -57,12 +57,12 @@ class CandidateController {
       return response.status(400).json({ error: 'Name  or Partido is required' });
     }
 
-    const nameExists = await CandidatesRepository.findByName(name);
-    const partidoExists = await CandidatesRepository.findByPartido(partido);
+    // const nameExists = await CandidatesRepository.findByName(name);
+    // const partidoExists = await CandidatesRepository.findByPartido(partido);
 
-    if ((nameExists && partidoExists) && (nameExists && partidoExists).id !== id) {
-      return response.status(400).json({ error: 'Partido and Name is exists' });
-    }
+    // if ((nameExists && partidoExists) || (nameExists && partidoExists).id !== id) {
+    //   return response.status(400).json({ error: 'Partido and Name is exists' });
+    // }
 
     const candidate = await CandidatesRepository.update(id, { name, partido, votos });
 

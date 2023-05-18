@@ -1,98 +1,63 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { v4 } = require('uuid');
 
-let candidates = [
-  {
-    id: v4(),
-    name: 'Laydianne',
-    partido: 'PL',
-    votos: '100',
-  },
-  {
-    id: v4(),
-    name: 'José',
-    partido: 'PMDB',
-    votos: '200',
-  },
-];
+const db = require('../../database');
 
 class CandidatesRepository {
-  findAll() {
-    return new Promise((resolve) => {
-      resolve(candidates);
-    });
+  async findAll() {
+    const rows = await db.query('SELECT * FROM candidate;');
+
+    return rows;
   }
 
-  findById(id) {
-    return new Promise((resolve) => {
-      resolve(candidates.find((candidate) => candidate.id === id));
-    });
+  async findById(id) {
+    const row = await db.query('SELECT * FROM candidate WHERE id = $1', [id]);
+
+    return row;
   }
 
-  findByName(name) {
-    return new Promise((resolve) => {
-      resolve(candidates.find((candidate) => candidate.name === name));
-    });
+  // async findById(id) {
+  //   const query = 'SELECT * FROM candidate WHERE id = $1';
+  //   const values = [id];
+  //   const [row] = await db.query(query, values);
+  //   return row;
+  // }
+
+  async findByName(name) {
+    const row = await db.query('SELECT * FROM candidate WHERE nome = $1', [name]);
+
+    return row;
   }
 
-  findByPartido(partido) {
-    return new Promise((resolve) => {
-      resolve(candidates.find((candidate) => candidate.partido === partido));
-    });
+  async findByPartido(partido) {
+    const row = await db.query('SELECT * FROM candidate WHERE partido = $1', [partido]);
+
+    return row;
   }
 
-  delete(id) {
-    return new Promise((resolve) => {
-      candidates = candidates.filter((candidate) => candidate.id !== id);
-      resolve();
-    });
+  async delete(id) {
+    const deleteOp = await db.query('DELETE FROM candidate---------- WHERE id =$1', [id]);
+    return deleteOp;
   }
 
-  create({ name, partido, votos }) {
-    return new Promise((resolve) => {
-      const newCandidate = {
-        id: v4(),
-        name,
-        partido,
-        votos,
-      };
-      candidates.push(newCandidate);
-      resolve(newCandidate);
-    });
+  async create({ name, partido, votos }) {
+    const [row] = await db.query(`
+      INSERT INTO candidate(nome, partido, voto)
+      VALUES($1, $2, $3)
+      RETURNING *
+    `, [name, partido, votos]);
+
+    return row;
   }
 
-  update(id, { name, partido, votos }) {
-    // return new Promise((resolve) => {
-    //   const updateCandidate = {
-    //     id,
-    //     name,
-    //     partido,
-    //     votos,
-    //   };
-    //   candidates = candidates.map((candidate) => (
-    //     candidate.id === id ? updateCandidate : candidate
-    //   ));
+  async update(id, { name, partido, votos }) {
+    const [row] = await db.query(`
+    UPDATE candidate
+    SET nome = $1, partido = $2, voto = voto + $3
+    WHERE id = $4
+    RETURNING *
+  `, [name, partido, votos, id]);
 
-    //   resolve(updateCandidate);
-    // });
-
-    return new Promise((resolve) => {
-      const candidate = candidates.find((c) => c.id === id);
-
-      // if (!candidate) {
-      //   return resolve(null);
-      // }
-
-      const oldVotos = parseInt(candidate.votos);
-      const newVotos = parseInt(votos);
-      const updatedVotos = oldVotos + newVotos;
-
-      candidate.name = name;
-      candidate.partido = partido;
-      candidate.votos = updatedVotos.toString();
-
-      resolve(candidate);
-    });
+    return row;
   }
 }
 
