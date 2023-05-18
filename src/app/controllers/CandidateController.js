@@ -53,9 +53,9 @@ class CandidateController {
       return response.status(404).json({ error: 'User not found' });
     }
 
-    if (!name || !partido) {
-      return response.status(400).json({ error: 'Name  or Partido is required' });
-    }
+    // if (!name || !partido) {
+    //   return response.status(400).json({ error: 'Name  or Partido is required' });
+    // }
 
     // const nameExists = await CandidatesRepository.findByName(name);
     // const partidoExists = await CandidatesRepository.findByPartido(partido);

@@ -35,7 +35,7 @@ class CandidatesRepository {
   }
 
   async delete(id) {
-    const deleteOp = await db.query('DELETE FROM candidate---------- WHERE id =$1', [id]);
+    const deleteOp = await db.query('DELETE FROM candidate WHERE id =$1', [id]);
     return deleteOp;
   }
 
@@ -52,7 +52,7 @@ class CandidatesRepository {
   async update(id, { name, partido, votos }) {
     const [row] = await db.query(`
     UPDATE candidate
-    SET nome = $1, partido = $2, voto = voto + $3
+    SET nome = $1, partido = $2, voto = COALESCE(voto, 0) + $3
     WHERE id = $4
     RETURNING *
   `, [name, partido, votos, id]);
